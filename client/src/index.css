@@ -1,0 +1,433 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem !important;
+  height: 0.5rem !important;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #3238f2 !important;
+  border-radius: 0.25rem !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+@layer base {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+  body {
+    @apply font-body;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+  }
+  /* animate3 on scroll class  */
+
+  /* animate3 on scroll class End  */
+  .section {
+    @apply border-t-[#232323] border-t-[3px];
+  }
+
+  /* Button classes Start*/
+  .btn {
+    @apply inline-flex text-white bg-primary border-0 py-2 px-6 focus:outline-none hover:opacity-90 rounded text-lg;
+  }
+  .main-btn {
+    position: relative;
+    background: ■#fff;
+    color: #1f2937;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 0.25rem;
+    font-size: 1.125em;
+    padding: 10px 30px;
+    transition: 0.5s;
+  }
+  .main-btn:hover {
+    background: #3238f2;
+    letter-spacing: 0.25em;
+    box-shadow: 0 0 35px #3238f2;
+  }
+  .main-btn:before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+  }
+
+  .main-btn span {
+    position: relative;
+    z-index: 1;
+  }
+
+  .main-btn i {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  .main-btn i::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 80%;
+    width: 10px;
+    height: 4px;
+    background: #27282c;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+  }
+  .main-btn:hover i::before {
+    width: 20px;
+    left: 20%;
+  }
+
+  .main-btn i::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    width: 10px;
+    height: 4px;
+    background: #27282c;
+    transform: translateX(-50%) skewX(325deg);
+    transition: 0.5s;
+  }
+  .main-btn:hover i::after {
+    width: 20px;
+    left: 80%;
+  }
+  /* Button classes  End*/
+  .h1 {
+    @apply sm:text-4xl text-3xl mb-4 font-medium text-gray-900;
+  }
+  .p {
+    @apply mb-8 leading-relaxed text-gray-600;
+  }
+
+  /* Animated underline */
+  .cucss {
+    position: relative;
+  }
+  .cucss:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    border-top: solid 5px #3238f2;
+    left: 0;
+    bottom: -2px;
+    border-radius: 50%;
+    height: 8px;
+  }
+}
+
+.link {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.link:hover {
+  color: #3238f2;
+}
+
+/* MUI CSS */
+
+.MuiButton-root {
+  font-family: "Poppins", "Inter", sans-serif !important;
+}
+
+.MuiBadge-badge {
+  background-color: #3238f2 !important;
+}
+
+.MuiTabs-indicator {
+  background-color: #3238f2 !important;
+}
+
+.MuiTab-textColorPrimary.Mui-selected {
+  color: #3238f2 !important;
+}
+
+.MuiTab-root {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.8rem !important;
+}
+
+.MuiBreadcrumbs-ol {
+  font-family: inherit !important;
+  font-size: 0.875rem !important;
+}
+
+.actions button:hover svg {
+  pointer-events: none !important;
+}
+
+.Mui-selected.MuiPaginationItem-page {
+  background: #3238f2 !important;
+  color: white !important;
+}
+
+.MuiTabs-flexContainer button {
+  font-size: 0.85rem !important;
+  text-transform: capitalize !important;
+}
+
+.rightsidecontent .actions button {
+  min-width: 2.5rem !important; /* 40px in rem (assuming 16px base font size) */
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  height: 1.875rem !important; /* 30px in rem */
+  color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.btn-org {
+  background: #3238f2 !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+  font-size: 1rem !important;
+  padding: 0.4375rem 1.25rem !important; /* 7px and 20px in rem */
+}
+
+.btn-org:hover {
+  background: #171717 !important;
+}
+
+.btn-lg {
+  padding: 0.625rem 1.2rem !important; /* 10px and 30px in rem */
+  font-size: 1rem !important;
+}
+
+/* =================================
+======== Swiper Slider css ======= */
+
+.mySwiper {
+  overflow: inherit !important;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 100%;
+  width: 2.8125rem; /* 45px in rem (assuming 16px base font size) */
+  height: 2.8125rem; /* 45px in rem */
+  min-width: 2.8125rem; /* Ensures minimum width in rem */
+  box-shadow: 0 1px 3px #0000001f, 0 1px 2px #0000003d !important;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 1.25rem !important;
+  color: #000;
+}
+
+.swiper-button-prev:hover {
+  background: #3238f2 !important;
+}
+
+.swiper-button-next:hover {
+  background: #3238f2 !important;
+}
+
+.homCatSlider {
+  overflow: inherit !important;
+}
+
+.HomeCatSlider .swiper-button-prev,
+.HomeCatSlider .swiper-button-next {
+  width: 1.875rem;
+  height: 1.875rem;
+  min-width: 1.875rem;
+  min-height: 1.875rem;
+}
+
+.HomeCatSlider .swiper-button-prev:after,
+.HomeCatSlider .swiper-button-next:after {
+  font-size: 1rem !important;
+}
+
+.HomeCatSlider .swiper-button-prev {
+  left: -0.7rem !important;
+}
+
+.HomeCatSlider .swiper-button-next {
+  right: -0.7rem !important;
+}
+
+.HomeCatSlider .swiper-button-prev:hover {
+  background: #3238f2 !important;
+}
+
+.HomeCatSlider .swiper-button-next:hover {
+  background: #3238f2 !important;
+}
+
+.smallBtn .swiper-button-prev,
+.smallBtn .swiper-button-next {
+  width: 1.875rem;
+  height: 1.875rem;
+  min-width: 1.875rem;
+}
+
+.productslider .swiper-wrapper {
+  padding: 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+
+.swiperslider .zoomVerticalSliderThumb .swiper-slide {
+  height: auto !important;
+}
+
+.swiperslider .zoomVerticalSliderThumb .swiper-button-next {
+  bottom: 0.5rem !important;
+  top: auto !important;
+  right: inherit !important;
+  width: 100% !important;
+  height: 2rem !important;
+  border-radius: 0px !important;
+}
+
+.swiperslider .zoomVerticalSliderThumb .swiper-button-prev {
+  top: 1.2rem !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 2rem !important;
+  border-radius: 0px !important;
+}
+
+.swiperslider .zoomVerticalSliderThumb .swiper-button-next:after,
+.swiperslider .zoomVerticalSliderThumb .swiper-button-prev:after {
+  transform: rotate(90deg) !important;
+}
+
+/* React Collapse  */
+
+.ReactCollapse--collapse {
+  transition: height 400ms;
+}
+
+/* React Range input */
+.range-slider .range-slider__thumb {
+  width: 0.8rem !important;
+  height: 0.8rem !important;
+  background-color: #3238f2 !important;
+}
+
+.range-slider .range-slider__range {
+  background-color: #3238f2 !important;
+}
+
+.range-slider {
+  height: 0.4rem !important;
+}
+
+/* =================================
+======== CSS media quries ======= */
+
+@media only screen and (min-width: 320px) and (max-width: 992px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .navigation ul {
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    text-align: center;
+  }
+
+  .navigation ul li {
+    display: inline-block !important;
+    vertical-align: top !important;
+  }
+  .navigation ul::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+  .MuiTabs-flexContainer button {
+    font-size: 0.7rem !important;
+    text-transform: capitalize !important;
+  }
+
+  .sidebarProductList {
+    max-height: 100vh !important;
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+  }
+
+  .sidebarProductList::-wepkit-scrollbar {
+    display: none !important;
+  }
+
+  .cartPanel .MuiPaper-root {
+    width: 300px !important;
+  }
+}
+
+/* =================================
+======== page not found css ======= */
+.pnf {
+  display: flex;
+  min-height: 65vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pnf-title {
+  font-size: 6.25rem;
+  font-weight: 700;
+}
+
+.pnf-heading {
+  font-weight: normal;
+  margin-top: 1rem;
+}
+
+.pnf-btn {
+  color: black;
+  border: 0.0625rem solid black;
+  text-decoration: none;
+  padding: 0.625rem;
+  margin-top: 0.625rem;
+}
+
+.pnf-btn:hover {
+  background-color: black;
+  color: white;
+}
