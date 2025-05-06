@@ -25,7 +25,11 @@ function Home() {
         showLoadingToast: true,
         loadingMessage: "Fetching...",
       });
-      response?.success ? setFeatureData(response?.data?.prebuilds) : [];
+
+      if (response?.success) {
+        setFeatureData(response.data.prebuilds);
+        console.log("Fetched Feature Data:", response.data.prebuilds);
+      }
     };
 
     showAllFeature();
@@ -100,15 +104,13 @@ function Home() {
         showH2={true}
         showH3={false}
         showBtn={true}
-        builds={featureData?.filter((build) =>
-          build.subcategories.includes("Featured")
-        )} // Pass featured builds data
+        builds={featureData?.filter((build) => build.isFeatured === true)} // Pass featured builds data
       />
 
       {/* Pre-Built Gaming PCs End */}
 
       {/* Popular Products */}
-      <PopularTabs></PopularTabs>
+      <PopularTabs products={featureData}></PopularTabs>
       {/* Popular Products End */}
 
       {/* Why Choose Start */}

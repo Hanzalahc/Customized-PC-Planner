@@ -31,13 +31,20 @@ const MyWishlist = () => {
         <p className="mt-0">
           There are{" "}
           <span className="text-sm text-primary font-semibold">
-            {wishlistItems.length || 0}
+            {isUserLoggedIn ? wishlistItems.length : 0}{" "}
           </span>{" "}
           items in your wishlist.
         </p>
         <div className="flex items-end justify-end mb-4 ">
           <Button
-            onClick={() => dispatch(wishlistActions.clearwishlist())}
+            onClick={() => {
+              if (!isUserLoggedIn) {
+                toast.error("Please login to clear wishlist items");
+                return;
+              }
+
+              dispatch(wishlistActions.clearwishlist());
+            }}
             sx={{
               backgroundColor: "#3238f2",
               color: "#fff",
@@ -57,7 +64,7 @@ const MyWishlist = () => {
         </div>
       </div>
 
-      {wishlistItems?.length !== 0 ? (
+      {isUserLoggedIn && wishlistItems?.length !== 0 ? (
         wishlistItems?.map((item) => (
           <div
             key={item?._id}

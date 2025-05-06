@@ -85,10 +85,12 @@ function BottomBar() {
           />
 
           <span className="ml-2 text-black font-medium group-hover:text-primary ">
-            {cartData.length > 0
-              ? cartData.length > 99
-                ? "99+"
-                : cartData.length
+            {userLoginStatus
+              ? cartData.length > 0
+                ? cartData.length > 99
+                  ? "99+"
+                  : cartData.length
+                : 0
               : 0}
           </span>
         </Link>

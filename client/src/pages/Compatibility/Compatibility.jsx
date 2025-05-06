@@ -2,6 +2,7 @@ import Select from "react-select";
 import useProvideHooks from "../../hooks/useProvideHooks";
 import useApiSubmit from "../../hooks//useApiSubmit";
 import { useForm, Controller } from "react-hook-form";
+import { useLocation } from "react-router-dom";
 
 function Compatibility() {
   const { apis, useState, useEffect, showSuccess, useRef } = useProvideHooks();
@@ -12,6 +13,7 @@ function Compatibility() {
     reset,
     control,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -22,8 +24,10 @@ function Compatibility() {
   const [cpuData, setCpuData] = useState([]);
   const [gpuData, setGpuData] = useState([]);
   const resultsRef = useRef(null);
+  const location = useLocation();
+  const { cpu, gpu } = location.state || {};
+
   const handleProceed = () => {
-    // any logic like loading, validation...
     resultsRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -52,6 +56,9 @@ function Compatibility() {
     showAllGpu();
 
     showAllCpu();
+
+    if (cpu) setValue("cpu", cpu);
+    if (gpu) setValue("gpu", gpu);
   }, []);
 
   const handleFormSubmit = async (data) => {

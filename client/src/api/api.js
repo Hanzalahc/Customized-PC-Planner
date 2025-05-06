@@ -251,6 +251,11 @@ const apis = () => {
       method: "GET",
     },
 
+    updatePrebuild : {
+      url: `${local}prebuild/update/`,
+      method: "PUT",
+    },
+
     //Faq
     getFaq: `${local}faq/get`,
 

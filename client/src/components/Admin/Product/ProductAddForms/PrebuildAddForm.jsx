@@ -27,14 +27,7 @@ const PrebuildAddForm = ({ productType }) => {
     upgradeName: "",
     additionalPrice: "",
   });
-  const [selectedCpu, setSelectedCpu] = useState(null);
-  const [selectedGpu, setSelectedGpu] = useState(null);
-  const [selectedRam, setSelectedRam] = useState(null);
   const [selectedStorage, setSelectedStorage] = useState([]);
-  const [selectedPsu, setSelectedPsu] = useState(null);
-  const [selectedCooler, setSelectedCooler] = useState(null);
-  const [selectedCase, setSelectedCase] = useState(null);
-  const [selectedMotherboard, setSelectedMotherboard] = useState(null);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -47,200 +40,6 @@ const PrebuildAddForm = ({ productType }) => {
     getValues,
     formState: { errors },
   } = useForm();
-
-  const getTotalPrice = () => {
-    const storagePrices = Array.isArray(selectedStorage)
-      ? selectedStorage.map((sto) => sto.price || 0)
-      : [];
-    const prices = [
-      selectedCpu?.price,
-      selectedGpu?.price,
-      selectedRam?.price,
-      ...storagePrices,
-      selectedPsu?.price,
-      selectedCooler?.price,
-      selectedCase?.price,
-      selectedMotherboard?.price,
-    ];
-    // Filter out any undefined values and sum up the rest
-    console.log(
-      prices
-        .filter((price) => price !== undefined)
-        .reduce((total, price) => total + price, 0),
-      selectedCpu?.price
-    );
-    return prices
-      .filter((price) => price !== undefined)
-      .reduce((total, price) => total + price, 0);
-  };
-
-  const handleCpuSelect = (selectedOption) => {
-    if (selectedOption) {
-      const selectedCpu = cpuData.find(
-        (cpu) => cpu.model === selectedOption.value
-      );
-      console.log("selectedCpu", selectedCpu);
-
-      setSelectedCpu(selectedCpu);
-    } else {
-      setSelectedCpu([]);
-    }
-  };
-
-  const handleGpuSelect = (selectedOption) => {
-    if (selectedOption) {
-      const selectedGpu = gpuData.find(
-        (gpu) => gpu.model === selectedOption.value
-      );
-      toast.success("GPU selected");
-      setSelectedGpu(selectedGpu);
-    } else {
-      toast.success("GPU removed");
-      setSelectedGpu(null);
-    }
-  };
-
-  const handleRamSelect = (selectedOption) => {
-    if (selectedOption) {
-      const selectedRam = ramData.find(
-        (ram) => ram.model === selectedOption.value
-      );
-      if (
-        selectedMotherboard &&
-        selectedMotherboard.memoryType !== selectedRam.ramType
-      ) {
-        toast.error(
-          `Ram use ${selectedRam.ramType}, Not compatible with Motherboard ${selectedMotherboard.memoryType}`
-        );
-
-        return; // Exit the function early
-      }
-      toast.success("RAM selected");
-      setSelectedRam(selectedRam);
-    } else {
-      toast.success("RAM removed");
-      setSelectedRam(null);
-    }
-  };
-
-  const handleStorageSelect = (selectedOptions) => {
-    if (selectedOptions && selectedOptions.length > 2) {
-      toast.error("Cannot add more than two");
-      return;
-    }
-
-    if (selectedOptions) {
-      const selected = selectedOptions.map((option) =>
-        storageData.find((storage) => storage.model === option.value)
-      );
-      toast.success("Storage selected");
-      setSelectedStorage(selected);
-    } else {
-      toast.success("Storage removed");
-      setSelectedStorage([]);
-    }
-  };
-
-  const handlePsuSelect = (selectedOption) => {
-    if (selectedOption) {
-      const selectedPsu = psuData.find(
-        (psu) => psu.model === selectedOption.value
-      );
-      toast.success("PSU selected");
-      setSelectedPsu(selectedPsu);
-    } else {
-      toast.success("PSU removed");
-      setSelectedPsu(null);
-    }
-  };
-
-  const handleCaseSelect = (selectedOption) => {
-    if (selectedOption) {
-      const selectedCase = caseData.find(
-        (gcase) => gcase.model === selectedOption.value
-      );
-      if (
-        selectedMotherboard &&
-        selectedMotherboard.formFactor !== selectedCase.formFactor
-      ) {
-        toast.error(
-          `Case use ${selectedCase.formFactor} Form Factor, Not compatible with Motherboard ${selectedMotherboard.formFactor} Form Factor`
-        );
-
-        return; // Exit the function early
-      }
-      toast.success("Case selected");
-      setSelectedCase(selectedCase);
-    } else {
-      toast.success("Case removed");
-      setSelectedCase(null);
-    }
-  };
-
-  const handleMotherboardSelect = (selectedOption) => {
-    if (selectedOption) {
-      const selectedMotherboard = motherboardData.find(
-        (motherboard) => motherboard.model === selectedOption.value
-      );
-      if (selectedCpu && selectedCpu.socket !== selectedMotherboard.socket) {
-        toast.error(
-          `Motherboard use ${selectedMotherboard.socket} Socket, Not compatible with Cpu ${selectedCpu.socket} Socket`
-        );
-        return; // Exit the function early
-      }
-      if (
-        selectedRam &&
-        selectedRam.ramType !== selectedMotherboard.memoryType
-      ) {
-        toast.error(
-          `Motherboard use ${selectedMotherboard.memoryType}, Not compatible with Ram ${selectedRam.ramType}`
-        );
-        return; // Exit the function early
-      }
-      if (
-        selectedCase &&
-        selectedCase.formFactor !== selectedMotherboard.formFactor
-      ) {
-        toast.error(
-          `Motherboard use ${selectedMotherboard.formFactor} Form Factor, Not compatible with Case ${selectedCase.formFactor} Form Factor`
-        );
-
-        return; // Exit the function early
-      }
-
-      toast.success("Motherboard selected");
-      setSelectedMotherboard(selectedMotherboard);
-    } else {
-      toast.success("Motherboard removed");
-      setSelectedMotherboard(null);
-    }
-  };
-
-  const handleCoolerSelect = (selectedOption) => {
-    if (selectedOption) {
-      const selectedCooler = coolerData.find(
-        (cooler) => cooler.model === selectedOption.value
-      );
-      if (selectedCpu && selectedCooler.socket !== selectedCpu.socket) {
-        toast.error(
-          `Cooler use ${selectedCooler.socket} Socket, Not compatible with Cpu ${selectedCpu.socket} Socket`
-        );
-        return; // Exit the function early
-      }
-      toast.success("Cooler selected");
-      setSelectedCooler(selectedCooler);
-    } else {
-      toast.success("Cooler removed");
-      setSelectedCooler(null);
-    }
-  };
-
-  const calculateDiscount = useMemo(() => {
-    return (price, oldPrice) => {
-      if (!price || !oldPrice) return 0;
-      return Math.round(((oldPrice - price) / oldPrice) * 100);
-    };
-  }, []);
 
   const handleAddUpgrade = () => {
     if (newUpgrade.upgradeName && newUpgrade.additionalPrice) {
@@ -258,11 +57,11 @@ const PrebuildAddForm = ({ productType }) => {
   };
 
   const handleFormSubmit = async (data) => {
-    // if (files.length < 5) {
-    //   return showError("5 Product images are required");
-    // }
+    if (files.length < 5) {
+      return showError("5 Product images are required");
+    }
 
-    // const images = files.map((file) => file);
+    const images = files.map((file) => file);
 
     const formattedData = {
       model: data?.model.trim().replace(/\s+/g, " "),
@@ -272,40 +71,55 @@ const PrebuildAddForm = ({ productType }) => {
       weight: data?.weight.trim().replace(/\s+/g, " "),
       content: data?.content,
       brand: data?.brand.trim().replace(/\s+/g, " "),
-      price: parseInt(data?.price),
-      oldPrice: parseInt(data?.oldPrice),
-      discount: calculateDiscount(data?.price, data?.oldPrice),
+      // price: parseInt(data?.price),
+      // oldPrice: parseInt(data?.oldPrice),
+      // discount: calculateDiscount(data?.price, data?.oldPrice),
+      cpuPrice: parseInt(data?.cpu?.price),
+      gpuPrice: parseInt(data?.gpu?.price),
+      ramPrice: parseInt(data?.ram?.price),
+      storagePrice: selectedStorage.reduce(
+        (acc, sto) => acc + (parseInt(sto.price) || 0),
+        0
+      ),
+
+      psuPrice: parseInt(data?.psu?.price),
+      motherboardPrice: parseInt(data?.motherboard?.price),
+      airCoolerPrice: parseInt(data?.airCooler?.price),
+      gamingCasePrice: parseInt(data?.gamingCase?.price),
       stock: parseInt(data?.stock),
-      isFeatured: data?.isFeatured.value === "true" ? true : false,
+      isFeatured: data?.isFeatured.value,
       powerCategory: parseInt(data?.powerCategory.value),
       productType: productType,
       category: data?.category.value,
-      cpu: data?.cpu.value,
-      gpu: data?.gpu.value,
-      ram: data?.ram.value,
-      storage: selectedStorage.map((sto) => sto._id),
-      psu: data?.psu.value,
-      motherboard: data?.motherboard.value,
-      airCooler: data?.airCooler.value,
-      gamingCase: data?.gamingCase.value,
-      hasUpgradeOptions: hasUpgradeOptions,
+      components: {
+        cpu: data?.cpu.value,
+        gpu: data?.gpu.value,
+        ram: data?.ram.value,
+        storage: selectedStorage.map((sto) => sto._id),
+        psu: data?.psu.value,
+        motherboard: data?.motherboard.value,
+        airCooler: data?.airCooler.value,
+        gamingCase: data?.gamingCase.value,
+      },
+
+      hasUpgradeOptions: upgradeData.length !== 0 ? true : false,
       upgradeOptions: hasUpgradeOptions ? upgradeData : [],
 
-      // images: images,
+      images: images,
     };
-    console.log("formattedData", formattedData);
-    // const response = await apiSubmit({
-    //   url: apis().addProduct.url,
-    //   method: apis().addProduct.method,
-    //   values: formattedData,
-    //   showLoadingToast: true,
-    //   loadingMessage: "Adding Product, please wait...",
-    // });
 
-    // if (response.success) {
-    //   setFiles([]);
-    //   reset();
-    // }
+    const response = await apiSubmit({
+      url: apis().prebuildAdd.url,
+      method: apis().prebuildAdd.method,
+      values: formattedData,
+      showLoadingToast: true,
+      loadingMessage: "Adding Product, please wait...",
+    });
+
+    if (response.success) {
+      setFiles([]);
+      reset();
+    }
   };
 
   useEffect(() => {
@@ -542,53 +356,8 @@ const PrebuildAddForm = ({ productType }) => {
           )}
         </div>
       </div>
-      <div className=" grid grid-cols-3 mb-3 gap-5">
-        <div className="col">
-          <h3 className="text-base font-medium mb-1">Product Old Price *</h3>
-          <input
-            type="number"
-            className="w-full h-10 border border-[rgba(0,0,0,0.2)] focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-md p-3 text-sm"
-            step={0.01}
-            disabled
-            value={
-              getTotalPrice() > 0 ? getTotalPrice().toLocaleString() : "0.00"
-            }
-            {...register("oldPrice", {
-              required: true,
-              min: {
-                value: 0,
-                message: "Old price must be greater than 0",
-              },
-            })}
-          />
-          {errors.oldPrice && (
-            <span className="text-red-500 text-sm mt-1">
-              {errors.oldPrice.message}
-            </span>
-          )}
-        </div>
-        <div className="col">
-          <h3 className="text-base font-medium mb-1">Product Price *</h3>
-          <input
-            type="number"
-            placeholder="9000"
-            className="w-full h-10 border border-[rgba(0,0,0,0.2)] focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-md p-3 text-sm"
-            step={0.01}
-            {...register("price", {
-              required: true,
-              min: {
-                value: 0,
-                message: "Price must be greater than 0",
-              },
-            })}
-          />
-          {errors.price && (
-            <span className="text-red-500 text-sm mt-1">
-              {errors.price.message}
-            </span>
-          )}
-        </div>
 
+      <div className=" grid grid-cols-3 mb-3 gap-5">
         <div className="col">
           <h3 className="text-base font-medium mb-1">Product Stock *</h3>
           <input
@@ -610,8 +379,6 @@ const PrebuildAddForm = ({ productType }) => {
             </span>
           )}
         </div>
-      </div>
-      <div className=" grid grid-cols-2 mb-3 gap-5">
         <div className="col">
           <h3 className="text-base font-medium mb-1">Is Featured * </h3>
           <Controller
@@ -624,8 +391,8 @@ const PrebuildAddForm = ({ productType }) => {
                 className="w-full text-sm font-medium"
                 classNamePrefix="select"
                 options={[
-                  { value: "true", label: "Yes" },
-                  { value: "false", label: "No" },
+                  { value: true, label: "Yes" },
+                  { value: false, label: "No" },
                 ]}
               />
             )}
@@ -761,23 +528,9 @@ const PrebuildAddForm = ({ productType }) => {
                   cpuData?.map((item) => ({
                     value: item._id,
                     label: item.model,
+                    price: item.price,
                   })) || []
                 }
-                value={
-                  field.value
-                    ? cpuData.find((cpu) => cpu._id === field.value)
-                      ? {
-                          value: field.value,
-                          label: cpuData.find((cpu) => cpu._id === field.value)
-                            .model,
-                        }
-                      : null
-                    : null
-                }
-                onChange={(selectedOption) => {
-                  field.onChange(selectedOption.value); // Update RHF state
-                  handleCpuSelect(selectedOption); // Your local state
-                }}
               />
             )}
           />
@@ -804,6 +557,7 @@ const PrebuildAddForm = ({ productType }) => {
                   gpuData?.map((item) => ({
                     value: item._id,
                     label: item.model,
+                    price: item.price,
                   })) || []
                 }
               />
@@ -832,6 +586,7 @@ const PrebuildAddForm = ({ productType }) => {
                   ramData?.map((item) => ({
                     value: item._id,
                     label: item.model,
+                    price: item.price,
                   })) || []
                 }
               />
@@ -863,27 +618,23 @@ const PrebuildAddForm = ({ productType }) => {
                   storageData?.map((item) => ({
                     value: item._id,
                     label: item.model,
-                    itemData: item, // pass full item for state
+                    itemData: item,
                   })) || []
                 }
                 value={
                   selectedStorage?.map((sto) => ({
                     value: sto._id,
                     label: sto.model,
+                    itemData: sto,
                   })) || []
                 }
                 onChange={(selectedOptions) => {
                   // Limit to 2
                   const limited = selectedOptions?.slice(0, 2) || [];
-
-                  // update react-hook-form value
                   field.onChange(limited);
-
-                  // update your local state
                   const fullStorageItems = limited.map((opt) =>
                     storageData.find((item) => item._id === opt.value)
                   );
-
                   setSelectedStorage(fullStorageItems);
                 }}
               />
@@ -914,6 +665,7 @@ const PrebuildAddForm = ({ productType }) => {
                   psuData?.map((item) => ({
                     value: item._id,
                     label: item.model,
+                    price: item.price,
                   })) || []
                 }
               />
@@ -942,6 +694,7 @@ const PrebuildAddForm = ({ productType }) => {
                   motherboardData?.map((item) => ({
                     value: item._id,
                     label: item.model,
+                    price: item.price,
                   })) || []
                 }
               />
@@ -970,6 +723,7 @@ const PrebuildAddForm = ({ productType }) => {
                   coolerData?.map((item) => ({
                     value: item._id,
                     label: item.model,
+                    price: item.price,
                   })) || []
                 }
               />
@@ -998,6 +752,7 @@ const PrebuildAddForm = ({ productType }) => {
                   caseData?.map((item) => ({
                     value: item._id,
                     label: item.model,
+                    price: item.price,
                   })) || []
                 }
               />
@@ -1024,6 +779,7 @@ const PrebuildAddForm = ({ productType }) => {
             <Controller
               name="hasUpgradeOptions"
               control={control}
+              disabled={upgradeData.length < 1}
               rules={{ required: "Has Upgrade Options is required" }}
               render={({ field }) => (
                 <Select
@@ -1042,8 +798,8 @@ const PrebuildAddForm = ({ productType }) => {
                       : null
                   }
                   onChange={(selectedOption) => {
-                    field.onChange(selectedOption.value); // Update React Hook Form state
-                    setHasUpgradeOptions(selectedOption.value); // Your local state (if needed)
+                    field.onChange(selectedOption.value);
+                    setHasUpgradeOptions(selectedOption.value);
                   }}
                 />
               )}
@@ -1117,8 +873,7 @@ const PrebuildAddForm = ({ productType }) => {
                 className="flex justify-between items-center p-2 border mb-2"
               >
                 <span>
-                  {item.componentType} - {item.upgradeName} ($
-                  {item.additionalPrice})
+                  {item.upgradeName} ({item.additionalPrice})
                 </span>
                 <Button
                   variant="outlined"

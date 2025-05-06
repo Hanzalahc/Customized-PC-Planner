@@ -105,4 +105,17 @@ const productSchema = new mongoose.Schema(
   }
 );
 
+productSchema.statics.updateRating = async function (productId) {
+  const product = await this.findById(productId).populate("reviews", "rating");
+
+  if (product.reviews.length > 0) {
+    const totalRating = product.reviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+    product.rating = totalRating / product.reviews.length;
+    await product.save();
+  }
+};
+
 export default mongoose.model("Product", productSchema);

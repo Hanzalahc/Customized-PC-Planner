@@ -7,62 +7,36 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import { Navigation, FreeMode } from "swiper/modules";
-import useProvideHooks from "../../hooks/useProvideHooks";
-import useApiSubmit from "../../hooks/useApiSubmit";
-import useReduxHooks from "./../../hooks/useReduxHooks";
 
-const PopularTabs = () => {
-  const { apis } = useProvideHooks();
-  const { apiSubmit } = useApiSubmit();
-  // const { products, productActions, dispatch } = useReduxHooks();
-
-  const [productsData, setProductsData] = useState([]);
-  // const categoriesData = categories.categoriesData || [];
-  // const productsData = products?.popularProductsData || [];
-  const popularProducts = productsData?.filter((product) => product.rating > 4);
+const PopularTabs = ({ products }) => {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth > 992);
+  const [popularProducts, setPopularProducts] = useState([]);
+  const [tabIndex, setTabIndex] = useState(0);
 
-  // const fetchProducts = async () => {
-  //   const response = await apiSubmit({
-  //     url: `${apis().getAllProducts.url}`,
-  //     method: apis().getAllProducts.method,
-
-  //     showLoadingToast: true,
-  //     successMessage: null,
-  //   });
-
-  //   if (response.success) {
-  //     dispatch(productActions.setProducts(response.data));
-  //     dispatch(productActions.setPopularProducts(response.data));
-  //   }
-  // };
-
-  const handleCategoryFilter = async (id) => {
-    //   if (id == "") {
-    //     fetchProducts();
-    //     return;
-    //   }
-    //   const response = await apiSubmit({
-    //     url: `${apis().getProductsByCategory.url}${id}`,
-    //     method: apis().getProductsByCategory.method,
-    //     showLoadingToast: true,
-    //     successMessage: null,
-    //   });
-    //   if (response.success) {
-    //     dispatch(productActions.setPopularProducts(response.data));
-    //   }
+  const handleCategoryFilter = (item, index) => {
+    setTabIndex(index);
+    setPopularProducts(
+      products?.filter(
+        (product) => product.category.name === item && product.rating >= 4
+      )
+    );
   };
 
   // Initial Fetch
   useEffect(() => {
-    // fetchProducts();
     const handleResize = () => {
       setIsDesktop(window.innerWidth > 992);
     };
-
+  
     window.addEventListener("resize", handleResize);
+  
+    if (products && products.length > 0) {
+      handleCategoryFilter("Gaming", 0);
+    }
+  
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [products]); 
+  
 
   return (
     <Container className="section">
@@ -77,28 +51,29 @@ const PopularTabs = () => {
               className=" p  mt-0 mb-0 
             "
             >
-              Products with 4+ rating available in the store
+              Pre Build Pc with 4 or above rating
             </p>
           </div>
           <div className="rightside laptop:w-[60%] w-full ">
             <Tabs
+              value={tabIndex}
+              onChange={(e, newValue) => {
+                const selectedCategory = ["Gaming", "Productivity"][newValue];
+                handleCategoryFilter(selectedCategory, newValue);
+              }}
               variant="scrollable"
               scrollButtons="auto"
               aria-label="scrollable auto tabs example"
             >
-              {["Gaming", "Productivity", "Featured"].map((item, index) => (
-                <Tab
-                  key={item}
-                  label={item}
-                  onClick={() => handleCategoryFilter()}
-                />
+              {["Gaming", "Productivity"].map((item) => (
+                <Tab key={item} label={item} />
               ))}
             </Tabs>
           </div>
         </div>
         <div className="productslider py-5">
           <Swiper
-            slidesPerView={5}
+            slidesPerView={4}
             spaceBetween={10}
             navigation={isDesktop}
             modules={[Navigation, FreeMode]}
@@ -117,7 +92,7 @@ const PopularTabs = () => {
                 spaceBetween: 10,
               },
               1100: {
-                slidesPerView: 5,
+                slidesPerView: 4,
                 spaceBetween: 10,
               },
             }}

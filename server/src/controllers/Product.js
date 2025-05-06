@@ -20,13 +20,41 @@ export const GetSingleProduct = asyncHandler(async (req, res, next) => {
       },
     },
     {
+      path: "components.cpu",
+      select: "model price benchmark",
+    },
+    {
+      path: "components.gpu",
+      select: "model price benchmark",
+    },
+    {
+      path: "components.ram",
+      select: "model price",
+    },
+    {
+      path: "components.storage",
+      select: "model price _id ",
+    },
+    {
+      path: "components.psu",
+      select: "model price",
+    },
+    {
+      path: "components.motherboard",
+      select: "model price",
+    },
+    {
+      path: "components.airCooler",
+      select: "model price",
+    },
+    {
+      path: "components.gamingCase",
+      select: "model price",
+    },
+    {
       path: "category",
       select: "name",
     },
-    // {
-    //   path: "components.cpu",
-
-    // }
   ]);
 
   if (!findedPrebuild) {
@@ -204,42 +232,44 @@ export const getProductsByStatus = asyncHandler(async (req, res, next) => {
   });
 });
 
-export const getPrebuildProductsByCategory = asyncHandler(async (req, res, next) => {
-  const categoryId = req.params.categoryId;
-  const pageNum = parseInt(req.query.pageNum) || 1;
-  const pageSize = 10;
+export const getPrebuildProductsByCategory = asyncHandler(
+  async (req, res, next) => {
+    const categoryId = req.params.categoryId;
+    const pageNum = parseInt(req.query.pageNum) || 1;
+    const pageSize = 10;
 
-  if (!categoryId) {
-    return next(new ApiError(400, "categoryId is required"));
+    if (!categoryId) {
+      return next(new ApiError(400, "categoryId is required"));
+    }
+
+    const products = await Product.find({
+      status: "active",
+      category: categoryId,
+    })
+      .skip((pageNum - 1) * pageSize)
+      .limit(pageSize)
+      .sort({ _id: -1 });
+
+    const productsCount = await Product.countDocuments({
+      status: "active",
+      category: categoryId,
+    });
+
+    const totalPages = Math.ceil(productsCount / pageSize);
+
+    if (products.length === 0) {
+      return next(new ApiError(404, "No products found with this category"));
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Products fetched successfully",
+      productsCount: productsCount,
+      totalPages: totalPages,
+      data: products,
+    });
   }
-
-  const products = await Product.find({
-    status: "active",
-    category: categoryId,
-  })
-    .skip((pageNum - 1) * pageSize)
-    .limit(pageSize)
-    .sort({ _id: -1 });
-
-  const productsCount = await Product.countDocuments({
-    status: "active",
-    category: categoryId,
-  });
-
-  const totalPages = Math.ceil(productsCount / pageSize);
-
-  if (products.length === 0) {
-    return next(new ApiError(404, "No products found with this category"));
-  }
-
-  return res.status(200).json({
-    success: true,
-    message: "Products fetched successfully",
-    productsCount: productsCount,
-    totalPages: totalPages,
-    data: products,
-  });
-});
+);
 
 export const deleteProduct = asyncHandler(async (req, res, next) => {
   const userData = req.user;

@@ -111,7 +111,7 @@ const ProductTab = ({ product, onReviewAdded, reviewsRef }) => {
       {activeTab === 0 && (
         <div className="shadow-md w-full py-5 px-8 rounded-md">
           <h4 className="font-medium text-lg">Product Description</h4>
-          <p className="mt-5 text-gray-500">
+          <p className="mt-5 text-[#1E2024]">
             {parse(product?.content) || "No description available"}
           </p>
         </div>

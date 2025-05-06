@@ -528,6 +528,8 @@ const CaseAddForm = ({ productType }) => {
                   "Razer",
                   "Sigma",
                   "Silverstone",
+                  "GameMax",
+                  "Ease",
                 ].map((item) => ({
                   value: item,
                   label: item,

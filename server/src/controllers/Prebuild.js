@@ -14,10 +14,6 @@ export const AddPrebuild = asyncHandler(async (req, res, next) => {
     return next(new ApiError(403, "Unauthorized request"));
   }
 
-  const { error } = validatePrebuild(req.body);
-  if (error) {
-    return next(new ApiError(400, error.details[0].message));
-  }
 
   const {
     name,
@@ -25,9 +21,6 @@ export const AddPrebuild = asyncHandler(async (req, res, next) => {
     content,
     images,
     brand,
-    price,
-    oldPrice,
-    discount,
     stock,
     isFeatured,
     model,
@@ -39,6 +32,14 @@ export const AddPrebuild = asyncHandler(async (req, res, next) => {
     category,
     hasUpgradeOptions,
     upgradeOptions,
+    gamingCasePrice,
+    airCoolerPrice,
+    motherboardPrice,
+    psuPrice,
+    storagePrice,
+    ramPrice,
+    gpuPrice,
+    cpuPrice,
   } = req.body;
 
   const duplicateProduct = await Product.findOne({
@@ -59,15 +60,30 @@ export const AddPrebuild = asyncHandler(async (req, res, next) => {
     return next(new ApiError(404, "Category not found"));
   }
 
+  // calculat pricer and old price
+
+  const prices = [
+    gamingCasePrice,
+    airCoolerPrice,
+    motherboardPrice,
+    psuPrice,
+    storagePrice,
+    ramPrice,
+    gpuPrice,
+    cpuPrice,
+  ];
+
+  const totalPrice = prices.reduce((sum, price) => sum + (price || 0), 0);
+
   const newPrebuild = new Prebuild({
     name,
     description,
     content,
     images,
     brand,
-    price,
-    oldPrice,
-    discount,
+    price: totalPrice,
+    oldPrice: totalPrice,
+    discount: 0,
     stock,
     isFeatured,
     model,
@@ -105,11 +121,23 @@ export const GetAllPrebuildDropdown = asyncHandler(async (req, res, next) => {
     status: "active",
     productType: "Prebuild",
   })
-    .select(" images name description price oldPrice discount rating  ")
-    .populate({
-      path: "category",
-      select: "name",
-    });
+    .select(
+      " images name description price oldPrice discount rating model components isFeatured"
+    )
+    .populate([
+      {
+        path: "category",
+        select: "name",
+      },
+      {
+        path: "components.cpu",
+        select: "model",
+      },
+      {
+        path: "components.gpu",
+        select: "model",
+      },
+    ]);
 
   if (!allPrebuilds || allPrebuilds.length === 0) {
     return next(new ApiError(404, "No Prebuilds found"));
@@ -201,36 +229,15 @@ export const UpdatePrebuild = asyncHandler(async (req, res, next) => {
     category,
     hasUpgradeOptions,
     upgradeOptions,
+    gamingCasePrice,
+    airCoolerPrice,
+    motherboardPrice,
+    psuPrice,
+    storagePrice,
+    ramPrice,
+    gpuPrice,
+    cpuPrice,
   } = req.body;
-
-  const isSameData =
-    product.name === name &&
-    product.description === description &&
-    product.content === content &&
-    product.images.length === images.length &&
-    product.brand === brand &&
-    product.price === price &&
-    product.status === status &&
-    product.oldPrice === oldPrice &&
-    product.discount === discount &&
-    product.stock === stock &&
-    product.isFeatured === isFeatured &&
-    product.model === model &&
-    product.warranty === warranty &&
-    product.weight === weight &&
-    product.powerCategory === powerCategory &&
-    product.productType === productType &&
-    product.components.cpu === components.cpu &&
-    product.components.gpu === components.gpu &&
-    product.components.ram === components.ram &&
-    product.components.storage.length === components.storage.length &&
-    product.components.psu === components.psu &&
-    product.components.motherboard === components.motherboard &&
-    product.components.airCooler === components.airCooler &&
-    product.components.gamingCase === components.gamingCase &&
-    product.category === category &&
-    product.hasUpgradeOptions === hasUpgradeOptions &&
-    product.upgradeOptions.length === upgradeOptions.length;
 
   const areImagesSame = product.images
     .map((img) => img.publicId)
@@ -239,10 +246,6 @@ export const UpdatePrebuild = asyncHandler(async (req, res, next) => {
       (publicId, index) =>
         publicId === images.map((img) => img.publicId).sort()[index]
     );
-
-  if (isSameData && areImagesSame) {
-    return next(new ApiError(400, "Nothing to update"));
-  }
 
   // Delete old images from cloudinary
   if (!areImagesSame) {
@@ -270,7 +273,30 @@ export const UpdatePrebuild = asyncHandler(async (req, res, next) => {
     await deleteRemovedImagesFromCloudinary(oldImages, newImages);
   }
 
-  if (product.category !== category) {
+  const categoryData = await PreBuildCategory.findOne({
+    name: category,
+  });
+
+  if (!categoryData) {
+    return next(new ApiError(404, "Category not found"));
+  }
+
+  // calculat pricer and old price
+
+  const prices = [
+    gamingCasePrice,
+    airCoolerPrice,
+    motherboardPrice,
+    psuPrice,
+    storagePrice,
+    ramPrice,
+    gpuPrice,
+    cpuPrice,
+  ];
+
+  const totalPrice = prices.reduce((sum, price) => sum + (price || 0), 0);
+
+  if (product.category !== categoryData._id.toString()) {
     const existingCategory = await PreBuildCategory.findByIdAndUpdate(
       product.category,
       { $pull: { products: productId } },
@@ -281,7 +307,7 @@ export const UpdatePrebuild = asyncHandler(async (req, res, next) => {
       return next(new ApiError(404, "Category not found"));
     }
     const newCategory = await PreBuildCategory.findByIdAndUpdate(
-      category,
+      categoryData._id,
       { $addToSet: { products: productId } },
       { new: true }
     );
@@ -299,11 +325,11 @@ export const UpdatePrebuild = asyncHandler(async (req, res, next) => {
       content,
       images,
       brand,
-      price,
-      oldPrice,
+      price: totalPrice === price ? totalPrice : price,
+      oldPrice: totalPrice === oldPrice ? totalPrice : oldPrice,
+      status,
       discount,
       stock,
-      status,
       isFeatured,
       model,
       warranty,
@@ -311,7 +337,7 @@ export const UpdatePrebuild = asyncHandler(async (req, res, next) => {
       powerCategory,
       productType,
       components,
-      category,
+      category: categoryData._id,
       hasUpgradeOptions,
       upgradeOptions,
     },
@@ -400,10 +426,10 @@ function validatePrebuild(data) {
     images: Joi.array().min(1).required(),
     brand: Joi.string().required().min(3).max(30),
     model: Joi.string().required().min(3).max(40),
-    price: Joi.number().min(0).required(),
     status: Joi.string().valid("active", "inactive").optional(),
-    oldPrice: Joi.number().min(0).optional(),
-    discount: Joi.number().min(0).max(100).required(),
+    discount: Joi.number().min(0).max(100).optional(),
+    price: Joi.number().required(),
+    oldPrice: Joi.number().required(),
     stock: Joi.number().min(0).required(),
     isFeatured: Joi.boolean().required(),
     warranty: Joi.string().required().min(3).max(20),
@@ -422,7 +448,16 @@ function validatePrebuild(data) {
         "Motherboard"
       )
       .required(),
+    status: Joi.string().optional(),
     components: Joi.object().required(),
+    cpuPrice: Joi.number().required(),
+    gpuPrice: Joi.number().required(),
+    ramPrice: Joi.number().required(),
+    storagePrice: Joi.number().required(),
+    gamingCasePrice: Joi.number().required(),
+    airCoolerPrice: Joi.number().required(),
+    motherboardPrice: Joi.number().required(),
+    psuPrice: Joi.number().required(),
     category: Joi.string().required(),
     hasUpgradeOptions: Joi.boolean().optional(),
     upgradeOptions: Joi.array().optional(),

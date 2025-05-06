@@ -8,14 +8,19 @@ import useProvideHooks from "../../hooks/useProvideHooks";
 import { Button } from "@mui/material";
 
 const CartLeftSide = () => {
-  const { cart, cartActions, dispatch } = useReduxHooks();
+  const { cart, cartActions, dispatch, auth } = useReduxHooks();
   const { showSuccess, showError } = useProvideHooks();
 
   const cartItems = cart?.cart || [];
+  const isUserLoggedIn = auth?.status || false;
 
   const [selectedQty, setSelectedQty] = useState(1);
 
   const handleRemoveCart = (id) => {
+    if (!isUserLoggedIn) {
+      showError("Please login to remove items from cart");
+      return;
+    }
     dispatch(cartActions.removeFromCart(id));
   };
 
@@ -35,13 +40,17 @@ const CartLeftSide = () => {
       <p className="mt-0">
         There are{" "}
         <span className="text-sm text-primary font-semibold">
-          {cartItems.length}{" "}
+          {isUserLoggedIn ? cartItems.length : 0}{" "}
         </span>{" "}
         items in your cart.
       </p>
       <div className="flex items-end justify-end mb-4 ">
         <Button
           onClick={() => {
+            if (!isUserLoggedIn) {
+              showError("Please login to remove items from cart");
+              return;
+            }
             dispatch(cartActions.clearCart());
           }}
           sx={{
@@ -62,7 +71,7 @@ const CartLeftSide = () => {
       </div>
 
       <div className="card shadow-md rounded-md bg-white">
-        {cartItems?.length !== 0 ? (
+        {isUserLoggedIn && cartItems?.length !== 0 ? (
           cartItems?.map((item) => (
             <div
               key={item?._id}

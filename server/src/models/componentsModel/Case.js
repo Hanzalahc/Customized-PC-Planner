@@ -26,6 +26,8 @@ const caseSchema = new mongoose.Schema({
       "Razer",
       "Sigma",
       "Silverstone",
+      "GameMax",
+      "Ease",
     ],
     required: true,
   },

@@ -10,36 +10,33 @@ function PreBuild() {
   const [gamingData, setGamingData] = useState([]);
   const [porductivityData, setPorductivityData] = useState([]);
 
+  const showAllBuilds = async () => {
+    const response = await apiSubmit({
+      url: apis().getPrebuildDropdown.url,
+      method: apis().getPrebuildDropdown.method,
+      successMessage: null,
+      showLoadingToast: true,
+      loadingMessage: "Fetching...",
+    });
+
+    if (response?.success) {
+      setFeatureData(
+        response.data.prebuilds.filter((item) => item.isFeatured === true)
+      );
+      setGamingData(
+        response.data.prebuilds.filter(
+          (item) => item.category.name === "Gaming"
+        )
+      );
+      setPorductivityData(
+        response.data.prebuilds.filter(
+          (item) => item.category.name === "Productivity"
+        )
+      );
+    }
+  };
+
   useEffect(() => {
-    const showAllBuilds = async () => {
-      const response = await apiSubmit({
-        url: apis().getPrebuildDropdown.url,
-        method: apis().getPrebuildDropdown.method,
-        successMessage: null,
-        showLoadingToast: true,
-        loadingMessage: "Fetching...",
-      });
-      if (response?.success) {
-        setFeatureData(
-          response?.data?.prebuilds.filter(
-            (build) => build.category.name === "Featured"
-          )
-        );
-
-        setGamingData(
-          response?.data?.prebuilds.filter(
-            (build) => build.category.name === "Gaming"
-          )
-        );
-
-        setPorductivityData(
-          response?.data?.prebuilds.filter(
-            (build) => build.category.name === "Productivity"
-          )
-        );
-      }
-    };
-
     showAllBuilds();
   }, []);
 
@@ -53,27 +50,21 @@ function PreBuild() {
           h3="Featured builds"
           p="Get the perfect blend of performance and value with this build, tailored for gamers who want high-quality gameplay without breaking the bank."
           showH2={true}
-          builds={featureData?.filter((build) =>
-            build.subcategories.includes("Featured")
-          )} // Filter data by category
+          builds={featureData}
         />
         <EachSection
           showH2={false}
           h3="Gaming builds"
           p="Get the perfect blend of performance and value with this build, tailored for gamers who want high-quality gameplay without breaking the bank."
           className="section"
-          builds={gamingData?.filter((build) =>
-            build.subcategories.includes("Gaming")
-          )} // Filter data by category
+          builds={gamingData}
         />
         <EachSection
           showH2={false}
           h3="Productivity builds"
           p="Get the perfect blend of performance and value with this build, tailored for gamers who want high-quality gameplay without breaking the bank."
           className="section"
-          builds={porductivityData?.filter((build) =>
-            build.subcategories.includes("Productivity")
-          )} // Filter data by category
+          builds={porductivityData} 
         />
       </Container>
     </main>

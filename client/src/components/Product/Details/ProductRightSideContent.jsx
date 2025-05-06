@@ -6,10 +6,12 @@ import { FaRegHeart } from "react-icons/fa6";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import useReduxHooks from "../../../hooks/useReduxHooks";
 import useProvideHooks from "../../../hooks/useProvideHooks";
+import { useNavigate } from "react-router-dom";
 
 const ProductRightSideContent = ({ product, goToReviews }) => {
   const { cartActions, dispatch, wishlistActions, auth } = useReduxHooks();
   const { showError } = useProvideHooks();
+  const navigate = useNavigate();
 
   const noOfReviews = product?.reviews?.length || 0;
   const isUserLoggedIn = auth?.status || false;
@@ -17,12 +19,55 @@ const ProductRightSideContent = ({ product, goToReviews }) => {
   const productType = product?.productType || "Cpu";
   const [selectedUpgrades, setSelectedUpgrades] = useState({});
 
-  const handleUpgradeChange = (component, value) => {
-    setSelectedUpgrades((prev) => ({
-      ...prev,
-      [component]: value,
-    }));
+  const handleUpgradeSelection = (upgradeName, price, isChecked) => {
+    setSelectedUpgrades((prev) => {
+      const updated = { ...prev };
+      if (isChecked) {
+        updated[upgradeName] = price || 0;
+      } else {
+        delete updated[upgradeName];
+      }
+      return updated;
+    });
   };
+
+  const handleCpuAndGpuCompatibilityCheck = () => {
+    const selectedCpu = {
+      value: product.components.cpu.benchmark,
+      label: product.components.cpu.model,
+    };
+    const selectedGpu = {
+      value: product.components.gpu.benchmark,
+      label: product.components.gpu.model,
+    };
+
+    navigate("/compatibility", {
+      state: {
+        cpu: selectedCpu,
+        gpu: selectedGpu,
+      },
+    });
+  };
+
+  const basePrice = Number(product?.price) || 0;
+  const totalUpgradeCost = Object.values(selectedUpgrades).reduce(
+    (sum, price) => sum + Number(price || 0),
+    0
+  );
+
+  const finalPrice = basePrice + totalUpgradeCost;
+
+  const componentEntries = Object.entries(product?.components || {}).flatMap(
+    ([key, value]) => {
+      if (Array.isArray(value)) {
+        return value.map((item) => ({
+          type: key,
+          ...item,
+        }));
+      }
+      return [{ type: key, ...value }];
+    }
+  );
 
   const tooltips = {
     Cpu: "This is a processor that powers your system.",
@@ -43,6 +88,7 @@ const ProductRightSideContent = ({ product, goToReviews }) => {
     }
     const payload = {
       ...product,
+      price: finalPrice,
     };
 
     dispatch(cartActions?.addToCart(payload));
@@ -95,7 +141,8 @@ const ProductRightSideContent = ({ product, goToReviews }) => {
               {product?.oldPrice} <span>PKR</span>
             </span>
             <span className="text-[#3238f2] font-semibold text-xl">
-              {product?.price} <span className="text-[#3238f2]">PKR</span>
+              {product?.price + totalUpgradeCost}{" "}
+              <span className="text-[#3238f2]">PKR</span>
             </span>
           </div>
           <div className="text-gray-600 text-sm">
@@ -414,6 +461,12 @@ const ProductRightSideContent = ({ product, goToReviews }) => {
               Prebuilt PC Specifications
             </h2>
 
+            <div className="mt-4">
+              <p className="text-sm mt-3 pr-10 mb-5">
+                {product?.description || "No Product Description"}
+              </p>
+            </div>
+
             {/* Table */}
             <div className="overflow-x-auto">
               <table className="min-w-full border border-gray-300">
@@ -422,119 +475,156 @@ const ProductRightSideContent = ({ product, goToReviews }) => {
                     <th className="p-2 border">Component</th>
                     <th className="p-2 border">Model</th>
                     <th className="p-2 border">Price (PKR)</th>
-                    <th className="p-2 border">Upgradeable</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {product?.components?.map((component, index) => (
-                    <tr key={index} className="border">
-                      <td className="p-2 border">{component.type}</td>
-                      <td className="p-2 border">{component.model || "N/A"}</td>
+                  {componentEntries.map((component, index) => {
+                    const isCPU = component.type.toLowerCase() === "cpu";
+                    const isGPU = component.type.toLowerCase() === "gpu";
+
+                    return (
+                      <React.Fragment key={index}>
+                        <tr className="border">
+                          <td className="p-2 border flex items-center gap-2">
+                            {/* Tooltip for CPU & GPU */}
+                            {isCPU || isGPU ? (
+                              <span className="font-medium cursor-pointer flex items-center gap-1">
+                                {component.type.charAt(0).toUpperCase() +
+                                  component.type.slice(1)}
+                                <Tooltip title={`${component.benchmark}`} arrow>
+                                  <span className="text-blue-500 underline">
+                                    View Benchmarks
+                                  </span>
+                                </Tooltip>
+                              </span>
+                            ) : (
+                              <span>
+                                {component.type.charAt(0).toUpperCase() +
+                                  component.type.slice(1)}
+                              </span>
+                            )}
+                          </td>
+
+                          <td className="p-2 border">
+                            {component.model || "N/A"}
+                          </td>
+                          <td className="p-2 border">
+                            {component.price ? `${component.price}` : "N/A"}
+                          </td>
+                        </tr>
+
+                        {/* Only show compatibility link after GPU row */}
+                        {isGPU && (
+                          <tr>
+                            <td colSpan={3} className="py-2 text-center">
+                              <Button
+                                onClick={handleCpuAndGpuCompatibilityCheck}
+                                className="inline-flex items-center gap-2 text-blue-500 hover:underline"
+                              >
+                                <span className="w-[6px] h-[6px] rounded-full bg-blue-600"></span>
+                                Check CPU & GPU Compatibility
+                              </Button>
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Upgrade Options Table */}
+            <div className="overflow-x-auto mt-4">
+              <table className="min-w-full border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="p-2 border">Upgrade</th>
+                    <th className="p-2 border">Price (PKR)</th>
+                    <th className="p-2 border">Select</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {product?.upgradeOptions?.map((upgrade) => (
+                    <tr key={upgrade.upgradeName} className="border">
+                      <td className="p-2 border">{upgrade.upgradeName}</td>
                       <td className="p-2 border">
-                        {component.price ? `${component.price} PKR` : "N/A"}
+                        {upgrade.additionalPrice
+                          ? `${upgrade.additionalPrice} PKR`
+                          : "N/A"}
                       </td>
                       <td className="p-2 border">
-                        {component.upgrades && component.upgrades.length > 0
-                          ? "Yes"
-                          : "No"}
+                        <input
+                          type="checkbox"
+                          onChange={(e) =>
+                            handleUpgradeSelection(
+                              upgrade.upgradeName,
+                              upgrade.additionalPrice,
+                              e.target.checked
+                            )
+                          }
+                        />
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <p className="mt-4 text-lg">
+                <strong>Total Price: </strong>
+                {finalPrice} PKR
+              </p>
             </div>
-
-            {/* Upgrade Options */}
-            {product?.components?.some(
-              (c) => c.upgrades && c.upgrades.length > 0
-            ) && (
-              <div className="mt-4">
-                <h3 className="text-md font-semibold text-gray-700">
-                  Upgrade Options
-                </h3>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full border border-gray-300">
-                    <thead>
-                      <tr className="bg-gray-200">
-                        <th className="p-2 border">Component</th>
-                        <th className="p-2 border">Upgrade Option</th>
-                        <th className="p-2 border">Additional Cost (PKR)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {product?.components?.map((component, index) =>
-                        component.upgrades?.map((upgrade, uIndex) => (
-                          <tr key={`${index}-${uIndex}`} className="border">
-                            <td className="p-2 border">{component.type}</td>
-                            <td className="p-2 border">{upgrade.model}</td>
-                            <td className="p-2 border">
-                              {upgrade.price ? `${upgrade.price} PKR` : "N/A"}
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
           </div>
         )}
-      </div>
 
-      <div className="mt-4">
-        <p className="text-sm mt-3 pr-10 mb-5">
-          {product?.description || "No Product Description"}
-        </p>
-      </div>
-
-      <p className="text-sm mt-4 mb-2">Free Shipping (Est. 7-10 days)</p>
-      <div className="flex items-center gap-4">
-        <div className="qtyboxwrapper w-[4.4rem]">
-          <Select
-            className="text-sm tablet:text-base font-medium"
-            classNamePrefix="select"
-            isSearchable={true}
-            defaultValue={{
-              value: product.quantity || selectedQty,
-              label: product.quantity || selectedQty,
-            }}
-            name="color"
-            options={
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]?.map((qty) => ({
-                value: qty,
-                label: qty,
-              })) || []
-            }
-            placeholder="Select Quantity"
-            onChange={(e) => {
-              handleQtyClose(e.value, product?._id, product?.stock);
-            }}
-          />
+        <p className="text-sm mt-4 mb-2">Free Shipping (Est. 7-10 days)</p>
+        <div className="flex items-center gap-4">
+          <div className="qtyboxwrapper w-[4.4rem]">
+            <Select
+              className="text-sm tablet:text-base font-medium"
+              classNamePrefix="select"
+              isSearchable={true}
+              defaultValue={{
+                value: product.quantity || selectedQty,
+                label: product.quantity || selectedQty,
+              }}
+              name="color"
+              options={
+                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]?.map((qty) => ({
+                  value: qty,
+                  label: qty,
+                })) || []
+              }
+              placeholder="Select Quantity"
+              onChange={(e) => {
+                handleQtyClose(e.value, product?._id, product?.stock);
+              }}
+            />
+          </div>
+          <Button
+            onClick={handleAddToCart}
+            disabled={product?.stock === 0}
+            className=" !bg-primary hover:!bg-black flex gap-2 !text-white"
+          >
+            <MdOutlineShoppingCart className=" text-xl text-white" />
+            {product?.stock === 0 ? "Out of Stock" : "Add to Cart"}
+          </Button>
         </div>
-        <Button
-          onClick={handleAddToCart}
-          disabled={product?.stock === 0}
-          className=" !bg-primary hover:!bg-black flex gap-2 !text-white"
-        >
-          <MdOutlineShoppingCart className=" text-xl text-white" />
-          {product?.stock === 0 ? "Out of Stock" : "Add to Cart"}
-        </Button>
-      </div>
-      <div className="flex items-center gap-4 mt-6">
-        <span
-          onClick={() => {
-            if (!isUserLoggedIn) {
-              showError("Please login to add items to wishlist");
-              return;
-            }
-            dispatch(wishlistActions?.addTowishlist(product));
-          }}
-          className="flex items-center gap-3 tablet:text-sm text-xs mt-2 link cursor-pointer font-medium"
-        >
-          <FaRegHeart />
-          Add to Wishlist
-        </span>
+        <div className="flex items-center gap-4 mt-6">
+          <span
+            onClick={() => {
+              if (!isUserLoggedIn) {
+                showError("Please login to add items to wishlist");
+                return;
+              }
+              dispatch(wishlistActions?.addTowishlist(product));
+            }}
+            className="flex items-center gap-3 tablet:text-sm text-xs mt-2 link cursor-pointer font-medium"
+          >
+            <FaRegHeart />
+            Add to Wishlist
+          </span>
+        </div>
       </div>
     </>
   );

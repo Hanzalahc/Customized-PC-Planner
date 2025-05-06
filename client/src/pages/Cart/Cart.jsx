@@ -1,15 +1,16 @@
 import React, { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { CartLeftSide } from "../../components/";
-import useReduxHooks from "../../hooks/useReduxHooks";
 import { Button } from "@mui/material";
 import useProvideHooks from "../../hooks/useProvideHooks";
+import useReduxHooks from "../../hooks/useReduxHooks"; 
 
 const Cart = () => {
-  const { cart } = useReduxHooks();
   const { navigate } = useProvideHooks();
+  const { cart, auth } = useReduxHooks();
 
   const cartItems = cart?.cart || [];
+  const isUserLoggedIn = auth?.status || false;
 
   const totalPrice = useMemo(() => {
     return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -31,7 +32,7 @@ const Cart = () => {
             <div className="p-4 border-b border-[rgba(0,0,0,0.1)]">
               <div className="flex justify-between">
                 <span className="text-sm">Subtotal</span>
-                <span className="text-sm">{totalPrice} PKR</span>
+                <span className="text-sm">{isUserLoggedIn && totalPrice} PKR</span>
               </div>
               <div className="flex justify-between mt-2">
                 <span className="text-sm">Shipping</span>
@@ -45,12 +46,13 @@ const Cart = () => {
             <div className="p-4 border-b border-[rgba(0,0,0,0.1)]">
               <div className="flex justify-between">
                 <span className="text-sm">Total</span>
-                <span className="text-sm">{totalPrice} PKR</span>
+                <span className="text-sm">{isUserLoggedIn && totalPrice} PKR</span>
               </div>
             </div>
             <div className="p-4">
               <Button
                 onClick={handleCheckout}
+                disabled={!isUserLoggedIn}
                 className="!w-full !bg-primary !text-white hover:!bg-black text-center !py-2 !rounded-md block"
               >
                 Proceed to Checkout

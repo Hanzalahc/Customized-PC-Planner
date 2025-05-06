@@ -5,14 +5,17 @@ function Footer() {
   return (
     <footer className="px-6 py-12 max-w-7xl mt-16 mx-auto lg:px-8 lg:mt-10 section">
       <div className="rounded-lg border lg:border-none lg:bg-gray-50 bg-gray-50 flex flex-col lg:flex-row-reverse items-center px-8 py-12 gap-8">
-        <Link to="#" className="font-light font-display">
+        <Link
+          to="https://github.com/Hanzalahc/Customized-PC-Planner"
+          className="font-light font-display"
+        >
           Check Documentation
         </Link>
         <div className="flex gap-8 text-lg">
           <Link to="#" className="text-gray-600 hover:text-gray-900">
             <i className="fa-brands fa-twitter"></i>
           </Link>
-          <Link to="#" className="text-gray-600 hover:text-gray-900">
+          <Link to="https://github.com/Hanzalahc/Customized-PC-Planner" className="text-gray-600 hover:text-gray-900">
             <i className="fa-brands fa-github"></i>
           </Link>
         </div>

@@ -32,14 +32,10 @@ function EachSection({
           {/* Map through the builds data */}
 
           {builds?.map((build, index) => (
-            <EachBuildPc
-              key={index}
-              src={build.images[0]} // Get the first image from the images array
-              alt={build.model} // Use model as alt text
-              h3={build.shortTitle} // Show shortTitle for the card title
-              span={`${build.components.cpu.model} - ${build.components.gpu.model}`} // Combine CPU and GPU models
-              price={`PKR ${build.purchasePrice}`} // Show the purchasePrice
-            />
+           <EachBuildPc
+           key={build._id} // Use build._id as the key
+           product={build}
+         />
           ))}
         </div>
         {/* button wrapper */}
