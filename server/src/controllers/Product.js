@@ -244,6 +244,7 @@ export const getPrebuildProductsByCategory = asyncHandler(
 
     const products = await Product.find({
       status: "active",
+      productType: "Prebuild",
       category: categoryId,
     })
       .skip((pageNum - 1) * pageSize)
@@ -252,6 +253,7 @@ export const getPrebuildProductsByCategory = asyncHandler(
 
     const productsCount = await Product.countDocuments({
       status: "active",
+      productType: "Prebuild",
       category: categoryId,
     });
 

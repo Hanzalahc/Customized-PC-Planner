@@ -44,16 +44,13 @@ const ChatBotPage = () => {
 
     try {
       setLoader(true);
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyD6Ubv1HFxXPTpIG9uk4e2cer5-ksXhcmI`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch(process.env.VITE_GOOGLE_GEMINI_API_KEY, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
       const data = await res.json();
 
       let dataString =

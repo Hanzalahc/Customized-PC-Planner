@@ -298,14 +298,7 @@ const AdminProductTable = () => {
             >
               Productivity
             </MenuItem>
-            <MenuItem
-              onClick={() =>
-                handlePrebuildCategoryFilter("67e2b378d89878634d8f86f5")
-              }
-              value={"67e2b378d89878634d8f86f5"}
-            >
-              Featured
-            </MenuItem>
+            
           </Select>
         </div>
 
