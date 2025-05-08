@@ -1,0 +1,69 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+client/node_modules/
+
+# Production builds
+dist/
+build/
+client/build/
+
+# Environment variables
+.env
+.env.*.local
+client/.env
+client/.env.*.local
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Debugging/coverage
+coverage/
+.nyc_output/
+debug.log
+
+# Optional npm cache
+.npm/
+
+# Optional eslint cache
+.eslintcache
+
+# TypeScript (if used)
+*.tsbuildinfo
+
+# Next.js (if using instead of CRA)
+.next/
+
+# React Native (if relevant)
+.expo/
+*.expo
+
+# Local database
+dump/
+data/
+mongodb/
+
+# Misc
+*.tgz
+*.swp
+
+# Ignore compiled JS files from TS (if used)
+*.js.map
