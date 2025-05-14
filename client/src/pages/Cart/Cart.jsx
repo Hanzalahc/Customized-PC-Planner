@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { CartLeftSide } from "../../components/";
 import { Button } from "@mui/material";
 import useProvideHooks from "../../hooks/useProvideHooks";
-import useReduxHooks from "../../hooks/useReduxHooks"; 
+import useReduxHooks from "../../hooks/useReduxHooks";
 
 const Cart = () => {
   const { navigate } = useProvideHooks();
@@ -32,7 +32,9 @@ const Cart = () => {
             <div className="p-4 border-b border-[rgba(0,0,0,0.1)]">
               <div className="flex justify-between">
                 <span className="text-sm">Subtotal</span>
-                <span className="text-sm">{isUserLoggedIn && totalPrice} PKR</span>
+                <span className="text-sm">
+                  {isUserLoggedIn && totalPrice} PKR
+                </span>
               </div>
               <div className="flex justify-between mt-2">
                 <span className="text-sm">Shipping</span>
@@ -46,16 +48,22 @@ const Cart = () => {
             <div className="p-4 border-b border-[rgba(0,0,0,0.1)]">
               <div className="flex justify-between">
                 <span className="text-sm">Total</span>
-                <span className="text-sm">{isUserLoggedIn && totalPrice} PKR</span>
+                <span className="text-sm">
+                  {isUserLoggedIn && totalPrice} PKR
+                </span>
               </div>
             </div>
             <div className="p-4">
               <Button
                 onClick={handleCheckout}
-                disabled={!isUserLoggedIn}
+                disabled={!isUserLoggedIn || cartItems.length === 0}
                 className="!w-full !bg-primary !text-white hover:!bg-black text-center !py-2 !rounded-md block"
               >
-                Proceed to Checkout
+                {isUserLoggedIn
+                  ? "Checkout"
+                  : "Login to Checkout" || cartItems.length === 0
+                  ? "Add Items to Cart"
+                  : "Checkout"}
               </Button>
 
               <Link

@@ -88,7 +88,7 @@
 }
 
 /* Textarea for input */
-textarea {
+/* textarea {
   margin-top: 10px;
   resize: none;
   height: 50px;
@@ -97,10 +97,10 @@ textarea {
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 14px;
-}
+} */
 
 /* Send button */
-button {
+/* button {
   background-color: #0070f3;
   color: white;
   border: none;
@@ -109,7 +109,7 @@ button {
   cursor: pointer;
   margin-top: 10px;
   align-self: flex-end;
-}
+} */
 
 /* Optional: Add styles for the typing indicator */
 .botMsg.typing {
