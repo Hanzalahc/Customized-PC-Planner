@@ -38,44 +38,6 @@ const PsuEditForm = () => {
 
     const images = files.map((file) => file);
 
-    const areImagesSame = productData.images
-      .map((img) => img.publicId)
-      .sort()
-      .every(
-        (publicId, index) =>
-          publicId === images.map((img) => img.publicId).sort()[index]
-      );
-
-    if (
-      productData.name === data.name.trim().replace(/\s+/g, " ") &&
-      productData.description ===
-        data.description.trim().replace(/\s+/g, " ") &&
-      data.content === productData.content &&
-      productData.brand === data.brand.trim().replace(/\s+/g, " ") &&
-      productData.price === parseInt(data.price) &&
-      productData.oldPrice === parseInt(data.oldPrice) &&
-      productData.stock === parseInt(data.stock) &&
-      productData.status === data.status.value &&
-      productData.isFeatured === data.isFeatured.value &&
-      productData.model === data.model &&
-      productData.powerCategory === data.powerCategory.value &&
-      productData.weight === data.weight &&
-      productData.warranty === data.warranty &&
-      productData.socket === data.socket.value &&
-      productData.stockCooler === data.stockCooler.value &&
-      productData.manufacturor === data.manufacturor.value &&
-      productData.benchmark === parseInt(data.benchmark) &&
-      productData.coreCount === parseInt(data.coreCount) &&
-      productData.threadCount === parseInt(data.threadCount) &&
-      productData.l2Cache === parseFloat(data.l2Cache) &&
-      productData.l3Cache === parseFloat(data.l3Cache) &&
-      productData.performanceCoreFrequency ===
-        parseFloat(data.performanceCoreFrequency) &&
-      areImagesSame
-    ) {
-      return showError("No changes detected");
-    }
-
     const formattedData = {
       name: data?.name.trim().replace(/\s+/g, " "),
       description: data?.description.trim().replace(/\s+/g, " "),
@@ -92,6 +54,11 @@ const PsuEditForm = () => {
       manufacturer: data?.manufacturer.value,
       weight: data?.weight,
       warranty: data?.warranty,
+      powerSupplyType: data?.powerSupplyType.value,
+      efficiencyRating: data?.efficiencyRating.value,
+      modularType: data?.modularType.value,
+    
+    
      
       images: images,
     };
@@ -152,6 +119,35 @@ const PsuEditForm = () => {
             }
           : null
       );
+      setValue(
+        "powerSupplyType",
+        response.data.powerSupplyType
+          ? { value: response.data.powerSupplyType, label: response.data.powerSupplyType }
+          : null
+      );
+
+      setValue(
+        "efficiencyRating",
+        response.data.efficiencyRating
+          ? { value: response.data.efficiencyRating, label: response.data.efficiencyRating }
+          : null
+      );
+
+      setValue(
+        "modularType",
+        response.data.modularType
+          ? { value: response.data.modularType, label: response.data.modularType }
+          : null
+      );
+
+      setValue(
+        "manufacturer",
+        response.data.manufacturer
+          ?
+              { value: response.data.manufacturer, label: response.data.manufacturer }
+          : null
+      );
+
       
       setFiles(response.data.images);
     }
