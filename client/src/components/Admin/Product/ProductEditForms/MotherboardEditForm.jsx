@@ -56,7 +56,12 @@ const MotherboardEditForm = () => {
       manufacturer: data?.manufacturer.value,
       weight: data?.weight,
       warranty: data?.warranty,
-  
+      memoryType: data?.memoryType.value,
+      memorySlots: parseInt(data?.memorySlots),
+      pcieSlots: parseInt(data?.pcieSlots),
+      sataM2Slots: parseInt(data?.sataM2Slots),
+      socket: data?.socket.value,
+      formFactor: data?.formFactor.value,
       images: images,
     };
 
@@ -116,6 +121,41 @@ const MotherboardEditForm = () => {
             }
           : null
       );
+      setValue("manufacturer", 
+        response.data.manufacturer
+          ? {
+
+            value: response.data.manufacturer,
+            label: response.data.manufacturer,
+
+          }
+          : null
+      );
+
+      setValue("memoryType", response.data.memoryType
+        ? {
+          value: response.data.memoryType,
+          label: response.data.memoryType,
+        }
+        : null
+      );
+
+      setValue("socket", response.data.socket
+        ? {
+          value: response.data.socket,
+          label: response.data.socket,
+        }
+        : null
+      );
+
+      setValue("formFactor", response.data.formFactor
+        ? {
+          value: response.data.formFactor,
+          label: response.data.formFactor,
+        }
+        : null
+      );
+
      
       setFiles(response.data.images);
     }
@@ -559,11 +599,11 @@ const MotherboardEditForm = () => {
               required: true,
               min: {
                 value: 0,
-                message: "coreCount must be greater or 0",
+                message: "sataM2Slots must be greater or 0",
               },
               max: {
                 value: 7,
-                message: "coreCount must not be greater than 7",
+                message: "sataM2Slots must not be greater than 7",
               },
             })}
           />
