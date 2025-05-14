@@ -56,7 +56,9 @@ const CoolerEditForm = () => {
       manufacturer: data?.manufacturer.value,
       weight: data?.weight,
       warranty: data?.warranty,
-    
+      socket: data?.socket.value,
+      isWaterCooled: data?.isWaterCooled.value,
+      isFanless: data?.isFanless.value,
       images: images,
     };
 
@@ -116,7 +118,35 @@ const CoolerEditForm = () => {
             }
           : null
       );
-     
+      setValue(
+        "manufacturer",
+        response.data.manufacturer
+          ? { value: response.data.manufacturer, label: response.data.manufacturer }
+          : null
+      )
+
+      setValue(
+        "socket",
+        response.data.socket
+          ? { value: response.data.socket, label: response.data.socket }
+          : null
+      );
+
+      setValue(
+        "isWaterCooled",
+        response.data.isWaterCooled
+          ? { value: true, label: "Yes" }
+          : { value: false, label: "No" }
+      );
+
+      setValue(
+        "isFanless",
+        response.data.isFanless
+          ? { value: true, label: "Yes" }
+          : { value: false, label: "No" }
+      );
+
+    
       setFiles(response.data.images);
     }
   };
