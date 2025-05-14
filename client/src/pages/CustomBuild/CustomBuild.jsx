@@ -261,7 +261,7 @@ function CustomBuild() {
         url: apis().getCpuDropdown.url,
         method: apis().getCpuDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
       setCpuData(response?.success ? response?.data?.cpus : []);
@@ -272,7 +272,7 @@ function CustomBuild() {
         url: apis().getGpuDropdown.url,
         method: apis().getGpuDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
       response?.success ? setGpuData(response?.data?.gpus) : [];
@@ -283,7 +283,7 @@ function CustomBuild() {
         url: apis().getRamDropdown.url,
         method: apis().getRamDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
       response?.success ? setRamData(response?.data?.rams) : [];
@@ -294,7 +294,7 @@ function CustomBuild() {
         url: apis().getStorageDropdown.url,
         method: apis().getStorageDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
       response?.success ? setStorageData(response?.data?.storages) : [];
@@ -305,7 +305,7 @@ function CustomBuild() {
         url: apis().getPsuDropdown.url,
         method: apis().getPsuDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
       response?.success ? setPsuData(response?.data?.psus) : [];
@@ -316,7 +316,7 @@ function CustomBuild() {
         url: apis().getCaseDropdown.url,
         method: apis().getCaseDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
       response?.success ? setCaseData(response?.data?.cases) : [];
@@ -327,7 +327,7 @@ function CustomBuild() {
         url: apis().getMotherboardDropdown.url,
         method: apis().getMotherboardDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
       response?.success ? setMotherboardData(response?.data?.motherboards) : [];
@@ -893,11 +893,11 @@ function CustomBuild() {
               } border-0 py-2 px-6 focus:outline-none rounded-lg`}
             >
               <button
-                disabled={!canProceedToCheckout()}
+                disabled={!canProceedToCheckout() || !isUserLoggedIn}
                 className="text-white"
                 onClick={handleAddToCart}
               >
-                Add To Cart
+                {isUserLoggedIn ? "Add to Cart" : "Login to Add to Cart"}
               </button>
             </Link>
           </div>

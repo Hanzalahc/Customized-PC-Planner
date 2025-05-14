@@ -36,7 +36,7 @@ function Compatibility() {
       url: apis().getCpuDropdown.url,
       method: apis().getCpuDropdown.method,
       successMessage: null,
-      showLoadingToast: true,
+      showLoadingToast: false,
       loadingMessage: "Fetching...",
     });
     response?.success ? setCpuData(response?.data?.cpus) : [];

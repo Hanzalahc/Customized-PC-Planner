@@ -25,7 +25,7 @@ const AdminHomeBoxes = () => {
       url: apis().getStats.url,
       method: apis().getStats.method,
       successMessage: null,
-      showLoadingToast: true,
+      showLoadingToast: false,
       loadingMessage: "Fetching Stats...",
     });
 

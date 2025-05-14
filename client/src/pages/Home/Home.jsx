@@ -22,7 +22,7 @@ function Home() {
         url: apis().getPrebuildDropdown.url,
         method: apis().getPrebuildDropdown.method,
         successMessage: null,
-        showLoadingToast: true,
+        showLoadingToast: false,
         loadingMessage: "Fetching...",
       });
 
