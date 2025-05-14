@@ -51,8 +51,14 @@ const RamEditForm = () => {
       isFeatured: data?.isFeatured.value,
       model: data?.model,
       powerCategory: data?.powerCategory.value,
+      warranty: data?.warranty,
+      weight: data?.weight,
+      ramSize: data?.ramSize.value,
+      ramType: data?.ramType.value,
+      latency: data?.latency,
+      cacheLatency: data?.cacheLatency,
       manufacturer: data?.manufacturer.value,
-
+      module: data?.module,
       images: images,
     };
 
@@ -110,6 +116,50 @@ const RamEditForm = () => {
               value: response.data.powerCategory,
               label: response.data.powerCategory,
             }
+          : null
+      );
+      setValue(
+        "ramType",
+        response.data.ramType
+          ? { value: response.data.ramType, label: response.data.ramType }
+          : null
+      );
+
+      setValue(
+        "manufacturer",
+        response.data.manufacturer
+          ? {
+            value: response.data.manufacturer,
+            label: response.data.manufacturer,
+          }
+          : null
+      );
+
+      setValue(
+        "module",
+        response.data.module
+          ? { value: response.data.module, label: response.data.module }
+          : null
+      );
+
+      setValue(
+        "latency",
+        response.data.latency
+          ? { value: response.data.latency, label: response.data.latency }
+          : null
+      );
+
+      setValue(
+        "cacheLatency",
+        response.data.cacheLatency
+          ? { value: response.data.cacheLatency, label: response.data.cacheLatency }
+          : null
+      );
+
+      setValue(
+        "ramSize",
+        response.data.ramSize
+          ? { value: response.data.ramSize, label: response.data.ramSize }
           : null
       );
       
