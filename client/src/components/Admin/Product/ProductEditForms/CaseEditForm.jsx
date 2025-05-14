@@ -120,8 +120,7 @@ const CaseEditForm = () => {
       setValue(
         "videoCardLength",
         response.data.videoCardLength
-          ? { value: response.data.videoCardLength, label: response.data.videoCardLength }
-          : null
+          
       )
 
       setValue(

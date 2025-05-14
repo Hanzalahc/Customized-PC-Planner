@@ -156,6 +156,10 @@ const MotherboardEditForm = () => {
         : null
       );
 
+      setValue("memorySlots", response.data.memorySlots);
+      setValue("pcieSlots", response.data.pcieSlots);
+      setValue("sataM2Slots", response.data.sataM2Slots);
+
      
       setFiles(response.data.images);
     }

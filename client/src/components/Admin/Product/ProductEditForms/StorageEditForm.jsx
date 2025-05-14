@@ -54,6 +54,10 @@ const StorageEditForm = () => {
       manufacturor: data?.manufacturor.value,
       weight: data?.weight,
       warranty: data?.warranty,
+      storageType: data?.storageType.value,
+      capacity: parseInt(data?.capacity),
+      readSpeed: parseInt(data?.readSpeed),
+      writeSpeed: parseInt(data?.writeSpeed),
       images: images,
     };
 
@@ -113,6 +117,47 @@ const StorageEditForm = () => {
             }
           : null
       );
+      setValue(
+        "manufacturer",
+        response.data.manufacturer
+
+          ?
+              { value: response.data.manufacturer, label: response.data.manufacturer }
+          : null
+      );
+
+      setValue(
+        "storageType",
+        response.data.storageType
+          ? { value: response.data.storageType, label: response.data.storageType }
+          : null
+      );
+      setValue(
+        "capacity",
+        response.data.capacity
+
+      );
+      setValue(
+        "readSpeed",
+        response.data.readSpeed
+
+      );
+      setValue(
+        "writeSpeed",
+        response.data.writeSpeed
+
+      );
+
+      setValue(
+        "storageType",
+        response.data.
+          storageType
+          ? { value: response.data.storageType, label: response.data.storageType }
+          : null
+
+      );
+
+
       setFiles(response.data.images);
     }
   };

@@ -53,12 +53,12 @@ const RamEditForm = () => {
       powerCategory: data?.powerCategory.value,
       warranty: data?.warranty,
       weight: data?.weight,
-      ramSize: data?.ramSize.value,
+      ramSize: parseInt(data?.ramSize),
       ramType: data?.ramType.value,
-      latency: data?.latency,
-      cacheLatency: data?.cacheLatency,
       manufacturer: data?.manufacturer.value,
       module: data?.module,
+      latency: parseInt(data?.latency),
+      cacheLatency: parseFloat(data?.cacheLatency),
       images: images,
     };
 
@@ -137,30 +137,24 @@ const RamEditForm = () => {
 
       setValue(
         "module",
-        response.data.module
-          ? { value: response.data.module, label: response.data.module }
-          : null
-      );
+        response.data.module)
 
       setValue(
         "latency",
         response.data.latency
-          ? { value: response.data.latency, label: response.data.latency }
-          : null
+
       );
 
       setValue(
         "cacheLatency",
         response.data.cacheLatency
-          ? { value: response.data.cacheLatency, label: response.data.cacheLatency }
-          : null
       );
 
       setValue(
         "ramSize",
         response.data.ramSize
-          ? { value: response.data.ramSize, label: response.data.ramSize }
-          : null
+          
+
       );
       
       setFiles(response.data.images);
