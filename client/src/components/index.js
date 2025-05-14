@@ -24,9 +24,7 @@ import CartLeftSide from "./Cart/CartLeftSide";
 import FileUpload from "./common/FileUpload";
 import RTE from "./Common/RTE";
 import ProductListView from "./Product/Listing/ProductListView";
-import Answers from "./ChatBot/Answers";
-import QuestionAnswer from './ChatBot/QuestionAnswer';
-import RecentSearch from './ChatBot/RecentSearch';
+import ChatPopup from "./ChatBot/ChatPopup";
 
 export {
   Header,
@@ -55,8 +53,5 @@ export {
   FileUpload,
   RTE,
   ProductListView,
-  Answers,
-  QuestionAnswer,
-  RecentSearch,
-
+  ChatPopup,
 };

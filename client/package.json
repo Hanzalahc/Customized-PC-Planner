@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@emotion/styled": "^11.14.0",
+    "@google/generative-ai": "^0.24.1",
     "@mui/material": "^6.1.8",
     "@mui/styled-engine-sc": "^6.1.8",
     "@reduxjs/toolkit": "^2.3.0",

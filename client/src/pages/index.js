@@ -39,7 +39,6 @@ import SearchResults from "./SearchPage/SearchResults";
 import VerifyEmailLink from "./AuthPages/VerifyEmailLink";
 import VerifyPassLink from "./AuthPages/VerifyPassLink";
 import ProductDetails from "./Product/ProductDetails";
-import ChatBotPage from "./ChatBotPage/ChatBotPage";
 
 export {
   Home,
@@ -77,5 +76,4 @@ export {
   VerifyEmailLink,
   VerifyPassLink,
   ProductDetails,
-  ChatBotPage,
 };

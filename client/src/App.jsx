@@ -44,7 +44,6 @@ import {
   VerifyEmailLink,
   VerifyPassLink,
   ProductDetails,
-  ChatBotPage,
 } from "./pages/index";
 
 // Import components
@@ -104,10 +103,6 @@ function App() {
         {
           path: "/search-results",
           element: <SearchResults />,
-        },
-        {
-          path: "/chatbot",
-          element: <ChatBotPage />,
         },
         {
           element: <UserProtectedRoute />,

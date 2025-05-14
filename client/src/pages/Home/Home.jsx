@@ -28,7 +28,6 @@ function Home() {
 
       if (response?.success) {
         setFeatureData(response.data.prebuilds);
-        console.log("Fetched Feature Data:", response.data.prebuilds);
       }
     };
 

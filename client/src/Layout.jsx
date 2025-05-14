@@ -1,7 +1,13 @@
 // Layout.jsx
 import React, { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Header, Footer, ProgressBar, Loader } from "./components/index";
+import {
+  Header,
+  Footer,
+  ProgressBar,
+  Loader,
+  ChatPopup,
+} from "./components/index";
 import useProvideHooks from "./hooks/useProvideHooks";
 import useReduxHooks from "./hooks/useReduxHooks";
 import useApiSubmit from "./hooks/useApiSubmit";
@@ -74,6 +80,7 @@ const Layout = () => {
       <Outlet />
       {!shouldHideHeaderFooter && <Footer />}
       {!shouldHideHeaderFooter && <ProgressBar />}
+      {!shouldHideHeaderFooter && <ChatPopup />}
     </>
   );
 };
