@@ -96,9 +96,12 @@ It features a **dynamic PC builder**, **pre-built system suggestions**, **benchm
 
 ## 🌐 Links
 
-- 📚 [Project Proposal](./Project-Proposal-CustomPcAdvisor.pdf)
-- 🔗 [Live Demo (If deployed)](https://yourdeploymentlink.com)
-- 🐙 [GitHub Repository](https://github.com/yourusername/CustomizedPCPlanner)
+- 📝 [Hashnode Article – Detailed Project Explanation](https://hanzalachaudhary.hashnode.dev/customized-pc-planner-my-final-year-project)
+- 📄 [FYP Documentation (Google Drive)](https://drive.google.com/drive/folders/1iwWEggWmiAT3ZYHIzqYB3UItcoPc15-X?usp=sharing)
+- 💻 [GitHub Repository](https://github.com/Hanzalahc/Customized-PC-Planner)
+- 🎥 [Video Explanation (LinkedIn)](https://www.linkedin.com/posts/hanzala-chaudhary_finalyearproject-fyp2025-webdevelopment-activity-7326586390228451329-TTwB?utm_source=share&utm_medium=member_desktop)
+- 🚀 [Live Demo](https://customizedpcplanner.netlify.app/)
+
 
 
 
