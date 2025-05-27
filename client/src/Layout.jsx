@@ -6,7 +6,6 @@ import {
   Footer,
   ProgressBar,
   Loader,
-  ChatPopup,
 } from "./components/index";
 import useProvideHooks from "./hooks/useProvideHooks";
 import useReduxHooks from "./hooks/useReduxHooks";
@@ -33,7 +32,6 @@ const Layout = () => {
     "/reset-password",
     "order-success",
     "/order-failed",
-    "/chatbot",
   ];
   const shouldHideHeaderFooter = hideHeaderFooter.includes(location.pathname);
 
@@ -80,7 +78,6 @@ const Layout = () => {
       <Outlet />
       {!shouldHideHeaderFooter && <Footer />}
       {!shouldHideHeaderFooter && <ProgressBar />}
-      {!shouldHideHeaderFooter && <ChatPopup />}
     </>
   );
 };

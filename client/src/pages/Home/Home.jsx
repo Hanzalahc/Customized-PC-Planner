@@ -56,8 +56,8 @@ function Home() {
             </p>
             {/* button wrapper */}
             <div className="flex justify-center">
-              {/* <Button desc="Ready Made" src="./pre-Build"></Button> */}
-              <Button desc="Ask AI" src="/chatbot"></Button>
+              <Button desc="Ready Made" src="./pre-Build"></Button>
+              {/* <Button desc="Ask AI" src="/chatbot"></Button> */}
               <BuyButton desc="Custom Build" src="/custom-build"></BuyButton>
             </div>
           </div>
