@@ -437,11 +437,9 @@ function Home() {
                   <h2 className="title-font font-medium text-lg text-gray-900">
                     Farhan Amjad
                   </h2>
-                  <h3 className="text-gray-500 mb-3">Full Stack</h3>
+                  <h3 className="text-gray-500 mb-3">Assisting and Supporting</h3>
                   <p className="mb-4">
-                    I streamline workflows by managing projects, budgets,
-                    contacts, and communications, ensuring tasks are completed
-                    efficiently.
+                   I  also contributed as assisting in front-end development using React.js  and supporting integration with backend APIs  My involvement helped bridge project coordination with hands-on development, ensuring both technical and managerial goals were aligned.
                   </p>
                   <span className="inline-flex">
                     <Link className="text-gray-500">

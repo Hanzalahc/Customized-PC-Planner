@@ -29,6 +29,7 @@ function CustomBuild() {
   const [selectedCase, setSelectedCase] = useState(null);
   const [selectedMotherboard, setSelectedMotherboard] = useState(null);
   const isUserLoggedIn = auth?.status || false;
+  const [iscartLoading, setiscartLoading] = useState(false);
 
   const selectedComponents = [
     selectedCpu,
@@ -360,6 +361,7 @@ function CustomBuild() {
       return;
     }
 
+    setiscartLoading(true);
     selectedComponents.forEach((component) => {
       // Handle storage array separately
       if (Array.isArray(component)) {
@@ -380,6 +382,7 @@ function CustomBuild() {
         dispatch(cartActions?.addToCart(payload));
       }
     });
+    setiscartLoading(false);
     showSuccess("Added to cart successfully");
     setSelectedCase(null);
     setSelectedCase(null);
@@ -897,7 +900,11 @@ function CustomBuild() {
                 className="text-white"
                 onClick={handleAddToCart}
               >
-                {isUserLoggedIn ? "Add to Cart" : "Login to Add to Cart"}
+                {isUserLoggedIn
+                  ? iscartLoading
+                    ? "Adding to Cart! Please wait"
+                    : "Add to Cart"
+                  : "Login to Add to Cart"}
               </button>
             </Link>
           </div>
